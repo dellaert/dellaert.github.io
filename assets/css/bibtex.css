@@ -1,0 +1,18 @@
+.publications {
+  background-color: #ffffff;
+  font-size: 10pt;
+  font-family: Arial, Helvetica, Univers, 'Zurich BT', sans-serif;
+}
+
+.booktitle,.journal, .institution, .number, .year { font-style:italic }
+
+#publications a:link, a:visited {
+  text-decoration: none;
+  color: #996633;
+}
+
+#publications .Person a:link, .Person a:visited  {color:green}
+
+.bibtexError {color: rgb(250,100,100)}
+
+#bibtex {display:none} 
