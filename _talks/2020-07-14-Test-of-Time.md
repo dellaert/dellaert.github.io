@@ -2,7 +2,7 @@
 title: "From Square Root SAM to GTSAM: Factor Graphs in Robotics"
 collection: talks
 type: "Talk"
-permalink: /talks/2012-03-01-talk-1
+permalink: /talks/Test-of-Time
 venue: "RSS Keynote"
 date: 2020-07-14
 location: ""
