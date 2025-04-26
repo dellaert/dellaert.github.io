@@ -8,9 +8,9 @@ redirect_from:
   - /about.html
 ---
 
-I am CTO at [Verdant Robotics](https://www.verdantrobotics.com/), a Bay Area startup that is creating the most advanced multi-action robotic farming implement, designed for superhuman farming!
+I am a Professor in the [School of Interactive Computing](https://www.ic.gatech.edu/), at the [Georgia Institute of Technology](https://www.gatech.edu/).
 
-I am still affiliated with the [Georgia Institute of Technology](https://www.gatech.edu/), where I am a Professor in the [School of Interactive Computing](https://www.ic.gatech.edu/), but I am currently on leave and *will not take any new students in 2023*.
+From 2022-2024 I was CTO at [Verdant Robotics](https://www.verdantrobotics.com/), a Bay Area startup that is creating the most advanced multi-action robotic farming implement, designed for superhuman farming! In 2025 I switched to a part-time role as Chief AI office after returning to Georgia Tech.
 
 I joined Georgia Tech in 2001 after obtaining a Ph.D. from [Carnegie Mellon’s School of Computer Science](https://www.scs.cmu.edu/), where I worked with [Hans Moravec](https://frc.ri.cmu.edu/~hpm/), [Chuck Thorpe](https://www.clarkson.edu/people/chuck-thorpe), [Sebastian Thrun](http://robots.stanford.edu/), and [Steve Seitz](https://homes.cs.washington.edu/~seitz/). Before that, I also obtained degrees from Case Western Reserve University and The Catholic University of Leuven, in Belgium.
 
