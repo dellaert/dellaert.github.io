@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - master
+  schedule:
+    - cron: "17 10 * * *"
   workflow_dispatch:
 
 permissions:
@@ -22,14 +24,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout website
         uses: actions/checkout@v7
+
+      - name: Checkout GTSAM.org
+        uses: actions/checkout@v7
+        with:
+          repository: borglab/gtsam.org
+          ref: master
+          path: .gtsam-source
+          persist-credentials: false
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
           bundler-cache: true
+
+      - name: Test GTSAM post synchronization
+        run: bundle exec ruby test/sync_gtsam_posts_test.rb
+
+      - name: Synchronize GTSAM posts
+        run: bundle exec ruby scripts/sync_gtsam_posts.rb .gtsam-source/_posts _data/gtsam_posts.yml
 
       - name: Setup Pages
         id: pages
