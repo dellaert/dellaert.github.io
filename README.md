@@ -1,31 +1,76 @@
-A Github Pages template for academic websites. This was forked (then detached) by [Stuart Geiger](https://github.com/staeiou) from the [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/), which is © 2016 Michael Rose and released under the MIT License. See LICENSE.md.
+# dellaert.github.io
 
-I think I've got things running smoothly and fixed some major bugs, but feel free to file issues or make pull requests if you want to improve the generic template / theme.
+This repository contains [Frank Dellaert's academic website](https://dellaert.github.io/). It is a Jekyll site based on the AcademicPages fork of the Minimal Mistakes theme and is deployed to GitHub Pages with GitHub Actions.
 
-### Note: if you are using this repo and now get a notification about a security vulnerability, delete the Gemfile.lock file. 
+## Site content
 
-# Instructions
+- `_config.yml` contains site-wide settings and profile links.
+- `_pages/` contains the main pages, including the Blog archive.
+- `_posts/` contains posts hosted directly on this site.
+- `_publications/`, `_talks/`, and `_teaching/` contain the corresponding academic collections.
+- `_data/gtsam_posts.yml` is a generated index of posts published on [GTSAM.org](https://gtsam.org/blog/).
 
-1. Register a GitHub account if you don't have one and confirm your e-mail (required!)
-1. Fork [this repository](https://github.com/academicpages/academicpages.github.io) by clicking the "fork" button in the top right. 
-1. Go to the repository's settings (rightmost item in the tabs that start with "Code", should be below "Unwatch"). Rename the repository "[your GitHub username].github.io", which will also be your website's URL.
-1. Set site-wide configuration and create content & metadata (see below -- also see [this set of diffs](http://archive.is/3TPas) showing what files were changed to set up [an example site](https://getorg-testacct.github.io) for a user with the username "getorg-testacct")
-1. Upload any files (like PDFs, .zip files, etc.) to the files/ directory. They will appear at https://[your GitHub username].github.io/files/example.pdf.  
-1. Check status by going to the repository settings, in the "GitHub pages" section
-1. (Optional) Use the Jupyter notebooks or python scripts in the `markdown_generator` folder to generate markdown files for publications and talks from a TSV file.
+## Local development
 
-See more info at https://academicpages.github.io/
+Install Ruby 3.3 and Bundler, then install the locked dependencies:
 
-## To run locally (not on GitHub Pages, to serve on your own computer)
+```sh
+bundle install
+```
 
-1. Clone the repository and made updates as detailed above
-1. Make sure you have ruby-dev, bundler, and nodejs installed: `sudo apt install ruby-dev ruby-bundler nodejs`
-1. Run `bundle clean` to clean up the directory (no need to run `--force`)
-1. Run `bundle install` to install ruby dependencies. If you get errors, delete Gemfile.lock and try again.
-1. Run `bundle exec jekyll liveserve` to generate the HTML and serve it from `localhost:4000` the local server will automatically rebuild and refresh the pages on change.
+To include the current GTSAM.org post index, clone its public repository once:
 
-# Changelog -- bugfixes and enhancements
+```sh
+git clone --depth 1 https://github.com/borglab/gtsam.org.git .gtsam-source
+bundle exec ruby scripts/sync_gtsam_posts.rb .gtsam-source/_posts _data/gtsam_posts.yml
+```
 
-There is one logistical issue with a ready-to-fork template theme like academic pages that makes it a little tricky to get bug fixes and updates to the core theme. If you fork this repository, customize it, then pull again, you'll probably get merge conflicts. If you want to save your various .yml configuration files and markdown files, you can delete the repository and fork it again. Or you can manually patch. 
+For later refreshes, update the checkout and rerun the importer:
 
-To support this, all changes to the underlying code appear as a closed issue with the tag 'code change' -- get the list [here](https://github.com/academicpages/academicpages.github.io/issues?q=is%3Aclosed%20is%3Aissue%20label%3A%22code%20change%22%20). Each issue thread includes a comment linking to the single commit or a diff across multiple commits, so those with forked repositories can easily identify what they need to patch.
+```sh
+git -C .gtsam-source pull --ff-only
+bundle exec ruby scripts/sync_gtsam_posts.rb .gtsam-source/_posts _data/gtsam_posts.yml
+```
+
+Serve the site with automatic rebuilding at <http://localhost:4000>:
+
+```sh
+bundle exec jekyll serve --livereload
+```
+
+Create the same production build used by GitHub Pages with:
+
+```sh
+JEKYLL_ENV=production bundle exec jekyll build
+```
+
+The committed `_data/gtsam_posts.yml` allows offline builds. Running the synchronization command updates that baseline and makes any upstream changes visible in the local Git diff.
+
+## Deployment and GTSAM synchronization
+
+The workflow in `.github/workflows/pages.yml` builds the site in four situations:
+
+- Pull requests targeting `master` build and test the complete Pages artifact without deploying it.
+- Pushes to `master` build and deploy the site.
+- The manual **Run workflow** action builds and deploys on demand.
+- A daily schedule at 10:17 UTC refreshes the deployed GTSAM.org post index without committing generated changes.
+
+Every workflow run checks out `borglab/gtsam.org`, tests the importer, regenerates `_data/gtsam_posts.yml`, and then builds Jekyll. If synchronization or the build fails, deployment does not run and the existing website stays online.
+
+GitHub automatically disables scheduled workflows in public repositories after 60 days without repository activity. If automatic refreshes stop, open the repository's **Actions** tab, select **Deploy Jekyll site to Pages**, enable the workflow if necessary, and use **Run workflow** for an immediate refresh. Committing a workflow change also re-enables its schedule.
+
+## Dependency maintenance
+
+`Gemfile.lock` is intentionally committed so local and CI builds use tested dependency versions. To update dependencies, run:
+
+```sh
+bundle update
+bundle exec ruby test/sync_gtsam_posts_test.rb
+bundle exec jekyll build
+```
+
+Review and commit both `Gemfile` and `Gemfile.lock` changes when applicable. Do not delete the lockfile to address dependency alerts; update the affected gems and validate the resulting build instead.
+
+## Attribution and license
+
+The site began with [AcademicPages](https://academicpages.github.io/), which was derived from the [Minimal Mistakes Jekyll theme](https://mmistakes.github.io/minimal-mistakes/). The theme is Copyright © 2016 Michael Rose and is distributed under the [MIT License](LICENSE).

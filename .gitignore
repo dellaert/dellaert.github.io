@@ -1,4 +1,5 @@
 _site
+.gtsam-source/
 .sass-cache
 .jekyll-metadata
 *.yml~
