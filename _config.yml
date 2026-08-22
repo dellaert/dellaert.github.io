@@ -144,6 +144,7 @@ exclude:
   - Gruntfile.js
   - LICENSE
   - README
+  - README.md
   - Rakefile
   - assets/js/_main.js
   - assets/js/plugins
@@ -153,6 +154,8 @@ exclude:
   - log
   - node_modules
   - package.json
+  - scripts
+  - test
   - tmp
   - vendor
 keep_files:
